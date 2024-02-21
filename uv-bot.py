@@ -74,7 +74,7 @@ async def say(interaction: discord.Interaction, texte: str, salon_url: str = Non
         await interaction.response.send_message("Message envoyé sur " + salon_url)
 
 @bot.tree.command(name="avatar",description="Affiche l'avatar d'un utilisateur.")
-async def smp(interaction: discord.Interaction,  utilisateur: discord.Member ):
+async def avatar(interaction: discord.Interaction,  utilisateur: discord.Member ):
     embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
     embed.set_image(url=utilisateur.avatar)
     
@@ -83,7 +83,7 @@ async def smp(interaction: discord.Interaction,  utilisateur: discord.Member ):
     await interaction.response.send_message(embed=embed)
 
 @bot.tree.command(name="profileavatar",description="Affiche l'avatar de profil d'un utilisateur.")
-async def smp(interaction: discord.Interaction,  utilisateur: discord.Member ):
+async def profileavatar(interaction: discord.Interaction,  utilisateur: discord.Member ):
     embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
     embed.set_image(url=utilisateur.display_avatar)
     
@@ -92,7 +92,7 @@ async def smp(interaction: discord.Interaction,  utilisateur: discord.Member ):
     await interaction.response.send_message(embed=embed)
 
 @bot.tree.command(name="servericon",description="Affiche l'icône du serveur actuel.")
-async def smp(interaction: discord.Interaction):
+async def servericon(interaction: discord.Interaction):
     guild_id = interaction.guild_id
     guild = bot.get_guild(guild_id)
     embed = discord.Embed(title=f"Icône du serveur {guild}",  color=discord.Color.from_rgb(193,168,233) )
