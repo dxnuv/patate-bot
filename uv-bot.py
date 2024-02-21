@@ -118,8 +118,8 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
     guild = bot.get_guild(guild_id)
     embed = discord.Embed(title=f"💌 Un membre du serveur {guild} vous a envoyé une lettre d'amour...", color=discord.Color.from_rgb(242, 80, 83))
     embed.set_thumbnail(url=guild.icon.url)
-    embed.add_field(name="Cher,", value=utilisateur.mention, inline=True)
-    embed.add_field(name="", value=message, inline=True)
+    embed.add_field(name="Cher,", value=utilisateur.mention, inline=False)
+    embed.add_field(name="Message :", value=message, inline=False)
     if anonyme:
         embed.add_field(name="Signé, ", value="pookie bear anonyme 🥰")
     else:
