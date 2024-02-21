@@ -102,7 +102,7 @@ async def smp(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="help",description="Affiche des informations concernant [uv]bot")
+@bot.tree.command(name="help",description="Affiche des informations concernant [uv]bot.")
 async def help(interaction: discord.Interaction):
  
     embed = discord.Embed(title="[uv]bot", description="[uv]bot est un bot discord crée exclusivement pour le serveur ultraviolet et présente de nombreuses fonctionnalitées essentielles. \n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
@@ -112,7 +112,24 @@ async def help(interaction: discord.Interaction):
     view.add_item(item=item)  # Add that item into the view class
     await interaction.response.send_message(embed=embed,view=view)
 
+@bot.tree.command(name="loveletter",description="Dévoile l'amour que tu portes envers une personne de ce serveur.")
+async def loveletter(interaction: discord.Interaction, utilisateur: discord.Member , message: str, anonyme: bool = False):
+    guild_id = interaction.guild_id
+    guild = bot.get_guild(guild_id)
+    embed = discord.Embed(title=f"💌 Un membre du serveur {guild} vous a envoyé une lettre d'amour...", color=discord.Color.from_rgb(242, 80, 83))
+    embed.set_thumbnail(url=guild.icon.url)
+    embed.add_field(name="Cher,", value=utilisateur.mention, inline=True)
+    embed.add_field(name="", value=message, inline=True)
+    if anonyme:
+        embed.add_field(name="Signé, ", value="pookie bear anonyme 🥰")
+    else:
+        embed.add_field(name="Signé, ", value=interaction.user.mention + " 🥰")
     
+    # Envoyer l'embed par message privé à l'utilisateur
+    await utilisateur.send(embed=embed)
+    await interaction.response.send_message("💌 Lettre d'amour envoyé à " + utilisateur.mention , ephemeral=True)
+
+
 
 with open('config.json') as f:
     data = json.load(f)
