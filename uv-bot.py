@@ -108,7 +108,7 @@ async def help(interaction: discord.Interaction):
     embed = discord.Embed(title="[uv]bot", description="[uv]bot est un bot discord crée exclusivement pour le serveur ultraviolet et présente de nombreuses fonctionnalitées essentielles. \n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
     view = discord.ui.View() # Establish an instance of the discord.ui.View class
     style = discord.ButtonStyle.grey  # The button will be gray in color
-    item = discord.ui.Button(style=style, label="Github", url="https://github.com/eldonxp/uv-bot")  # Create an item to pass into the view class.
+    item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/uv-bot")  # Create an item to pass into the view class.
     view.add_item(item=item)  # Add that item into the view class
     await interaction.response.send_message(embed=embed,view=view)
 
