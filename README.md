@@ -11,6 +11,7 @@ Liste des fonctionnalistés du bot.
 ### Commandes slash
 - **/avatar** : affiche l'avatar d'un utilisateur.
 - **/help** : affiche des informations concernant [uv]bot.
+- **/loveletter** : dévoile l'amour que tu portes envers une personne de ce serveur.
 - **/profileavatar** : affiche l'avatar de profil d'un utilisateur.
 - **/say** : envoie un message personnalisé sur un salon textuel.
 - **/servericon** : affiche l'icône du serveur actuel.
