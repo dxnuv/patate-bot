@@ -131,7 +131,7 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
 
 
 
-with open('config.json') as f:
+with open('config.json', encoding="utf-8", errors="ignore") as f:
     data = json.load(f)
     token = data["token"]
 bot.run(token)
