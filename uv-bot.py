@@ -19,6 +19,7 @@ bot = commands.Bot(command_prefix='uv!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game('/help｜ultraviolet [uv]'))
     try:
         synced = await bot.tree.sync()
         print(f"Synced {len(synced)} command(s)")
