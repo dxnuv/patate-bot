@@ -1,9 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style>
+
+body {
+	background: linear-gradient(-45deg, #9b65c9, #ccbfe6, #b07cde, #a390be);
+  background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+  display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+.container {
+      position: relative;
+      display: inline-block;
+      animation: spin 5s linear infinite;
+    }
+
+    .img-uv {
+      transition: transform 0.5s ease;
+      transform: scale(1);
+      background-position: center;
+    }
+
+    .container:hover .img-uv {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+    .container:active .img-uv {
+      transform: scale(0.5);
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    </style>
     <title>uv</title>
   </head>
   <body>
-    <h1>uv</h1>
+    <div class="container">
+    <image id="logo" class="img-uv" alt="uv - logo" src="images/uvpng.png"></image>
+    <link rel="icon" type="image/x-icon" href="images/uv.ico">
+  
+  </div>
   </body>
 </html>
+
+<script>
+
+document.getElementById('logo').addEventListener('click', function() {
+  window.open("https://github.com/dxnuv/uv-bot", '_blank').focus();
+    });
+
+
+</script>
