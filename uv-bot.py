@@ -7,16 +7,15 @@ from datetime import datetime
 import tempfile
 from io import BytesIO
 
-# Définir les intentions de votre bot
 intents = discord.Intents.default()
-intents.messages = True  # Activer les intentions liées aux messages
-intents.message_content = True  # Activer les intentions liées aux messages
+intents.messages = True  
+intents.message_content = True  
 intents.presences = True
 
-# Initialiser le bot avec les intentions
+
 bot = commands.Bot(command_prefix='uv!', intents=intents)
 
-# Événement pour détecter quand le bot est prêt
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
@@ -25,19 +24,13 @@ async def on_ready():
         print(f"Synced {len(synced)} command(s)")
     except Exception as e:
         print(e)
-    
-# Événement pour détecter les messages entrants
+        
 @bot.event
 async def on_message(message):
-    # Vérifier si le message contient exactement "y/n" en tant que mot distinct
     if "y/n" in message.content:
-        # Répondre "Bonjour!"
-        # Ajouter une réaction avec l'emoji vers le haut (flèche)
         await message.add_reaction('⬆️')
-        # Ajouter une réaction avec l'emoji vers le bas
         await message.add_reaction('⬇️')
-    
-    # Toujours nécessaire pour gérer les autres événements de message
+
     await bot.process_commands(message)
 
 @bot.tree.command(name="uvmcsmp",description="Présente des informations sur l'event [uv]mcsmp.")
@@ -92,10 +85,10 @@ async def servericon(interaction: discord.Interaction):
 async def help(interaction: discord.Interaction):
  
     embed = discord.Embed(title="[uv]bot", description="[uv]bot est un bot discord crée exclusivement pour le serveur ultraviolet et présente de nombreuses fonctionnalitées essentielles. \n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
-    view = discord.ui.View() # Establish an instance of the discord.ui.View class
-    style = discord.ButtonStyle.grey  # The button will be gray in color
-    item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/uv-bot")  # Create an item to pass into the view class.
-    view.add_item(item=item)  # Add that item into the view class
+    view = discord.ui.View() 
+    style = discord.ButtonStyle.grey 
+    item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/uv-bot")  
+    view.add_item(item=item)
     await interaction.response.send_message(embed=embed,view=view)
 
 
@@ -114,7 +107,6 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
         embed.add_field(name="Signé, ", value="pookie bear anonyme 🥰")
     else:
         embed.add_field(name="Signé, ", value=interaction.user.mention + " 🥰")
-        # Envoyer l'embed par message privé à l'utilisateur
         await utilisateur.send(embed=embed)
         embed = discord.Embed(description=f"✅** Bravo!｜**" + "💌 Lettre d'amour envoyé à " + utilisateur.mention , color=discord.Color.green())
         await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -124,11 +116,7 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
 async def archive(interaction: discord.Interaction, salon_textuel: discord.TextChannel):
 
     if interaction.user.guild_permissions.administrator:
-         # Retirer les caractères spéciaux du nom du salon
-         nom_salon_archives = re.sub(r'[^\w\s-]', '', salon_textuel.name)
-    # Générer la date actuelle au format DD-MM-YY
          date_formattee = datetime.now().strftime("%d-%m-%y")
-    # Créer le nouveau nom du salon d'archives
          nom_salon_archives += f"-{date_formattee}"
          categorie_archives = discord.utils.get(interaction.guild.categories, name="📦 archives")
 
@@ -137,14 +125,11 @@ async def archive(interaction: discord.Interaction, salon_textuel: discord.TextC
              embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
              await interaction.response.send_message(embed=embed, ephemeral=True)
          else:
-              # Déplacer le salon textuel vers la catégorie "ARCHIVES"
              await salon_textuel.edit(category=categorie_archives)
 
              salon_textuel_og = salon_textuel.name
-         # Renommer le salon textuel avec le nouveau nom d'archives
              await salon_textuel.edit(name=nom_salon_archives)
 
-         # Placer le salon textuel en haut de la liste des salons de la catégorie "ARCHIVES"
              await salon_textuel.edit(position=0)
 
              embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{salon_textuel_og}' a été archivé avec succès." , color=discord.Color.green())
