@@ -147,7 +147,7 @@ async def archive(interaction: discord.Interaction, salon_textuel: discord.TextC
          # Placer le salon textuel en haut de la liste des salons de la catégorie "ARCHIVES"
              await salon_textuel.edit(position=0)
 
-             embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{salon_textuel_og}' a été archivé avec succès." , color=discord.Color.green())
+             embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel {salon_textuel_og} a été archivé avec succès." , color=discord.Color.green())
              await interaction.response.send_message(embed=embed, ephemeral=True)
     else:
             erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
@@ -161,11 +161,11 @@ async def lock(interaction: discord.Interaction, salon_textuel: discord.TextChan
      if interaction.user.guild_permissions.administrator:
           if salon_textuel is None:
                 await interaction.channel.set_permissions(interaction.guild.default_role, send_messages=False)
-                embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{interaction.channel.jump_url}' a été désactivé avec succès." , color=discord.Color.green())
+                embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel {interaction.channel.jump_url} a été désactivé avec succès." , color=discord.Color.green())
                 await interaction.response.send_message(embed=embed)
           else:
                await salon_textuel.set_permissions(interaction.guild.default_role, send_messages=False)
-               embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{salon_textuel.jump_url}' a été désactivé avec succès." , color=discord.Color.green())
+               embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel {salon_textuel.jump_url} a été désactivé avec succès." , color=discord.Color.green())
                await interaction.response.send_message(embed=embed)
 
 
@@ -180,11 +180,11 @@ async def unlock(interaction: discord.Interaction, salon_textuel: discord.TextCh
      if interaction.user.guild_permissions.administrator:
           if salon_textuel is None:
                 await interaction.channel.set_permissions(interaction.guild.default_role, send_messages=True)
-                embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{interaction.channel.jump_url}' a été réactivé avec succès." , color=discord.Color.green())
+                embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel {interaction.channel.jump_url} a été réactivé avec succès." , color=discord.Color.green())
                 await interaction.response.send_message(embed=embed)
           else:
                await salon_textuel.set_permissions(interaction.guild.default_role, send_messages=True)
-               embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{salon_textuel.jump_url}' a été réactivé avec succès." , color=discord.Color.green())
+               embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel {salon_textuel.jump_url} a été réactivé avec succès." , color=discord.Color.green())
                await interaction.response.send_message(embed=embed)
 
 
