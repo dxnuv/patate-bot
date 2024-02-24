@@ -1,6 +1,6 @@
 # [uv]bot 
 
-![](https://dxnuv.github.io/uv-bot/images/uvpng180x180.png)
+![](https://dxnuv.github.io/uv-bot/images/uvpng-180x.png)
 
 [uv]bot est un bot discord crée exclusivement pour le serveur privé "ultraviolet [uv]" et présente de nombreuses fonctionnalitées essentielles.
 
