@@ -1,11 +1,10 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+from googletrans import Translator
+from datetime import datetime
 import json
 import re
-from datetime import datetime
-import tempfile
-from io import BytesIO
 
 intents = discord.Intents.default()
 intents.messages = True  
@@ -118,7 +117,7 @@ async def archive(interaction: discord.Interaction, salon_textuel: discord.TextC
 
     if interaction.user.guild_permissions.administrator:
          date_formattee = datetime.now().strftime("%d-%m-%y")
-         nom_salon_archives += f"-{date_formattee}"
+         nom_salon_archives = f"{salon_textuel.name}-{date_formattee}"  
          categorie_archives = discord.utils.get(interaction.guild.categories, name="📦 archives")
 
          if categorie_archives is None:
@@ -139,6 +138,7 @@ async def archive(interaction: discord.Interaction, salon_textuel: discord.TextC
             erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
             embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
             await interaction.response.send_message(embed=embed, ephemeral=True)
+
     
     
 @bot.tree.command(name="lock",description="Désactive un salon textuel.")
@@ -179,10 +179,7 @@ async def unlock(interaction: discord.Interaction, salon_textuel: discord.TextCh
              embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
              await interaction.response.send_message(embed=embed, ephemeral=True)    
 
-
-
-
 with open('config.json', encoding="utf-8", errors="ignore") as f:
-    data = json.load(f)
-    token = data["token"]
+    datatoken = json.load(f)
+    token = datatoken["token"]
 bot.run(token)
