@@ -9,6 +9,7 @@ import re
 intents = discord.Intents.default()
 intents.messages = True  
 intents.message_content = True  
+intents.members = True
 intents.presences = True
 
 
@@ -178,6 +179,30 @@ async def unlock(interaction: discord.Interaction, salon_textuel: discord.TextCh
              erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
              embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
              await interaction.response.send_message(embed=embed, ephemeral=True)    
+
+
+@bot.tree.command(name="rename", description="Renomme un salon textuel.")
+@app_commands.describe(salon_textuel="Lien du salon textuel", nouveau_nom="Nouveau nom du salon textuel")
+async def rename(interaction: discord.Interaction, salon_textuel: discord.TextChannel, nouveau_nom: str):
+    if interaction.user.guild_permissions.administrator:
+        try:
+            nom_actuel = salon_textuel.name
+            if '｜' in nom_actuel:  # Vérification s'il y a des caractères spéciaux
+                nom_actuel = nom_actuel.split('｜', 1)[-1]
+                nouveau_nom_complet = f"{salon_textuel.name.split('｜', 1)[0]}｜{nouveau_nom}"
+            else:
+                nouveau_nom_complet = nouveau_nom
+            await salon_textuel.edit(name=nouveau_nom_complet)
+            embed = discord.Embed(description=f"✅** Bravo!｜** Le salon textuel '{nom_actuel}' a été renommé en '{nouveau_nom_complet}' avec succès.", color=discord.Color.green())
+            await interaction.response.send_message(embed=embed)
+        except Exception as e:
+            erreur = f"Une erreur s'est produite lors du renommage du salon textuel : {e}"
+            embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
+            await interaction.response.send_message(embed=embed)
+    else:
+        erreur = "Vous n'avez pas les permissions requises pour exécuter cette commande."
+        embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
 
 with open('config.json', encoding="utf-8", errors="ignore") as f:
     datatoken = json.load(f)
