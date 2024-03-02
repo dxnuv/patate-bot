@@ -133,7 +133,7 @@ async def archive(interaction: discord.Interaction, salon_textuel: discord.TextC
 
              await salon_textuel.edit(position=0)
 
-             embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel '{salon_textuel_og}' a été archivé avec succès." , color=discord.Color.green())
+             embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel `{salon_textuel_og}` a été archivé avec succès." , color=discord.Color.green())
              await interaction.response.send_message(embed=embed, ephemeral=True)
     else:
             erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
@@ -193,7 +193,7 @@ async def rename(interaction: discord.Interaction, salon_textuel: discord.TextCh
             else:
                 nouveau_nom_complet = nouveau_nom
             await salon_textuel.edit(name=nouveau_nom_complet)
-            embed = discord.Embed(description=f"✅** Bravo!｜** Le salon textuel '{nom_actuel}' a été renommé en '{nouveau_nom_complet}' avec succès.", color=discord.Color.green())
+            embed = discord.Embed(description=f"✅** Bravo!｜** Le salon textuel `{nom_actuel}` a été renommé en `{nouveau_nom_complet}` avec succès.", color=discord.Color.green())
             await interaction.response.send_message(embed=embed)
         except Exception as e:
             erreur = f"Une erreur s'est produite lors du renommage du salon textuel : {e}"
@@ -203,6 +203,84 @@ async def rename(interaction: discord.Interaction, salon_textuel: discord.TextCh
         erreur = "Vous n'avez pas les permissions requises pour exécuter cette commande."
         embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
         await interaction.response.send_message(embed=embed)
+
+# Charger les tags à partir du fichier JSON
+def load_tags():
+    try:
+        with open('tags.json', 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+
+# Enregistrer les tags dans le fichier JSON
+def save_tags(tags):
+    with open('tags.json', 'w') as file:
+        json.dump(tags, file, indent=4)
+
+tag_group = app_commands.Group(name="tag", description="Manipule les tags.")
+
+@tag_group.command(name="use", description="Utilise un tag enregistré.")
+@app_commands.describe(tag_nom="Nom du tag")
+async def use_tag(interaction: discord.Interaction, tag_nom: str):
+    tags = load_tags()
+    if tag_nom in tags:
+        texte = tags[tag_nom]["texte"]
+        await interaction.response.send_message(texte)
+    else:
+        embed = discord.Embed( description="❌ **Erreur｜** Ce tag n'existe pas.", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
+
+@tag_group.command(name="new", description="Crée un nouveau tag.")
+@app_commands.describe(tag_nom="Nom du tag", texte="Texte intégré au tag")
+async def create_tag(interaction: discord.Interaction, tag_nom: str, texte: str):
+    tags = load_tags()
+    user_id = str(interaction.user.id)
+    if tag_nom in tags:
+        embed = discord.Embed(description=f"❌ **Erreur｜** Le tag `{tag_nom}` existe déjà.", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
+        return
+    tags[tag_nom] = {"texte": texte, "creator_id": user_id}
+    save_tags(tags)
+    embed = discord.Embed(description=f"✅ **Bravo!｜** Le tag `{tag_nom}` a été créé avec succès !", color=discord.Color.green())
+    await interaction.response.send_message(embed=embed)
+
+@tag_group.command(name="remove", description="Supprime un tag créé par vous.")
+@app_commands.describe(tag_nom="Nom du tag")
+async def remove_tag(interaction: discord.Interaction, tag_nom: str):
+    tags = load_tags()
+    user_id = str(interaction.user.id)
+    if tag_nom in tags and tags[tag_nom]["creator_id"] == user_id:
+        del tags[tag_nom]
+        save_tags(tags)
+        embed = discord.Embed(description=f"✅ **Bravo!｜** Le tag `{tag_nom}` a été supprimé avec succès !", color=discord.Color.green())
+        await interaction.response.send_message(embed=embed)
+    else:
+        embed = discord.Embed(description="❌ **Erreur｜** Vous n'êtes pas l'auteur de ce tag ou le tag n'existe pas.", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
+
+@tag_group.command(name="list", description="Affiche la liste des tags.")
+async def list_tags(interaction: discord.Interaction):
+    tags = load_tags()
+    if not tags:
+        embed = discord.Embed(title="Liste des Tags", description="Aucun tag n'a été créé 😔. Utilisez `/tag new` pour créer un nouveau tag.", color=discord.Color.from_rgb(193, 168, 233))
+        await interaction.response.send_message(embed=embed)
+        return
+    sorted_tags = sorted(tags.items())  # Trie les tags par ordre alphabétique
+    embed = discord.Embed(title="Liste des Tags", color=discord.Color.from_rgb(193,168,233))
+    for tag_nom, data in sorted_tags:
+        creator = interaction.guild.get_member(int(data["creator_id"]))
+        if creator:
+            creator_name = creator.display_name
+        else:
+            creator_name = "Utilisateur Inconnu"
+        embed.add_field(name=f"{tag_nom}", value=f"\n`Auteur` : {creator_name}", inline=False)
+        embed.set_footer(text=f"Utilisez `/tag new` pour créer un nouveau tag.")
+    await interaction.response.send_message(embed=embed)
+
+
+
+
+bot.tree.add_command(tag_group)
 
 with open('config.json', encoding="utf-8", errors="ignore") as f:
     datatoken = json.load(f)
