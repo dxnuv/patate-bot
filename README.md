@@ -6,19 +6,20 @@
 
 
 
-## Fonctionnalités
+## ⚙️ Fonctionnalités
 Liste des fonctionnalistés du bot.
-### Commandes slash
+#### Commandes slash
 - **/archive** : archive un salon textuel.
 - **/avatar** : affiche l'avatar d'un utilisateur.
 - **/help** : affiche des informations concernant [uv]bot.
 - **/lock** : désactive un salon textuel.
 - **/loveletter** : dévoile l'amour que tu portes envers une personne de ce serveur.
 - **/profileavatar** : affiche l'avatar de profil d'un utilisateur.
+- **/rename** : renomme un salon textuel.
 - **/say** : envoie un message personnalisé sur un salon textuel.
 - **/servericon** : affiche l'icône du serveur actuel.
 - **/unlock** : réactive un salon textuel.
-### Autres fonctionnalités
+#### Autres fonctionnalités
 - **y/n** : poser une question yes/no avec les réactions du bot (⬆️/⬇️).
-## Licence
+## 📝Licence
   MIT © ultraviolet (2024)
