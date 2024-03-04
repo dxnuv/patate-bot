@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from googletrans import Translator
 from datetime import datetime
 import json
+import requests
+import base64
 import re
 
 intents = discord.Intents.default()
@@ -34,21 +35,23 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-@bot.tree.command(name="uvmcsmp",description="Présente des informations sur l'event [uv]mcsmp.")
-async def smp(interaction: discord.Interaction):
-    await interaction.response.send_message(f"{interaction.user.mention} https://discord.gg/D2peqCa4vA?event=1207816940626771968")
 
 @bot.tree.command(name="say", description="Envoie un message personnalisé sur un salon textuel.")
 @app_commands.describe(texte="Le message à envoyer", salon_textuel="Lien du salon textuel")
 async def say(interaction: discord.Interaction, texte: str, salon_textuel: discord.TextChannel = None):
-    if salon_textuel is not None:  
+    if interaction.user.guild_permissions.administrator:
+      if salon_textuel is not None:  
                 await salon_textuel.send(texte)
                 embed = discord.Embed(description=f"✅** Bravo!｜**" + "Message envoyé sur " + salon_textuel.jump_url , color=discord.Color.green())
                 await interaction.response.send_message(embed=embed)
-    else:
+      else:
             erreur = "Le salon textuel n'existe pas."
             embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
             await interaction.response.send_message(embed=embed, ephemeral=True)
+    else:
+            erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
+            embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
+            await interaction.response.send_message(embed=embed, ephemeral=True)        
         
 
 @bot.tree.command(name="avatar",description="Affiche l'avatar d'un utilisateur.")
@@ -57,7 +60,7 @@ async def avatar(interaction: discord.Interaction,  utilisateur: discord.Member 
     embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
     embed.set_image(url=utilisateur.avatar)
     
-    download_link = f"[__Lien de l'image__]({utilisateur.avatar})"
+    download_link = f"[Lien de l'image]({utilisateur.avatar})"
     embed.add_field(name="", value=download_link)
     await interaction.response.send_message(embed=embed)
 
@@ -67,7 +70,7 @@ async def profileavatar(interaction: discord.Interaction,  utilisateur: discord.
     embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
     embed.set_image(url=utilisateur.display_avatar)
     
-    download_link = f"[__Lien de l'image__]({utilisateur.display_avatar})"
+    download_link = f"[Lien de l'image]({utilisateur.display_avatar})"
     embed.add_field(name="", value=download_link)
     await interaction.response.send_message(embed=embed)
 
@@ -77,7 +80,7 @@ async def servericon(interaction: discord.Interaction):
     guild = bot.get_guild(guild_id)
     embed = discord.Embed(title=f"Icône du serveur {guild}",  color=discord.Color.from_rgb(193,168,233) )
     embed.set_image(url=guild.icon.url)
-    download_link = f"[__Lien de l'image__]({guild.icon})"
+    download_link = f"[Lien de l'image]({guild.icon})"
     embed.add_field(name="", value=download_link)
 
     await interaction.response.send_message(embed=embed)
@@ -204,15 +207,17 @@ async def rename(interaction: discord.Interaction, salon_textuel: discord.TextCh
         embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
         await interaction.response.send_message(embed=embed)
 
-# Charger les tags à partir du fichier JSON
 def load_tags():
     try:
         with open('tags.json', 'r') as file:
             return json.load(file)
     except FileNotFoundError:
+        print("Le fichier tags.json n'a pas été trouvé.")
+        return {}
+    except Exception as e:
+        print(f"Une erreur s'est produite lors de la lecture du fichier tags.json : {e}")
         return {}
 
-# Enregistrer les tags dans le fichier JSON
 def save_tags(tags):
     with open('tags.json', 'w') as file:
         json.dump(tags, file, indent=4)
@@ -265,7 +270,7 @@ async def list_tags(interaction: discord.Interaction):
         embed = discord.Embed(title="Liste des Tags", description="Aucun tag n'a été créé 😔. Utilisez `/tag new` pour créer un nouveau tag.", color=discord.Color.from_rgb(193, 168, 233))
         await interaction.response.send_message(embed=embed)
         return
-    sorted_tags = sorted(tags.items())  # Trie les tags par ordre alphabétique
+    sorted_tags = sorted(tags.items())  
     embed = discord.Embed(title="Liste des Tags", color=discord.Color.from_rgb(193,168,233))
     for tag_nom, data in sorted_tags:
         creator = interaction.guild.get_member(int(data["creator_id"]))
@@ -278,11 +283,57 @@ async def list_tags(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
+@bot.tree.command(name="customemoji", description="Affiche l'image d'un emoji personnalisé.")
+@app_commands.describe(emoji_nom="Nom de l'emoji personnalisé")
+async def custom_emoji(interaction: discord.Interaction, emoji_nom: str):
 
+    emoji = discord.utils.get(interaction.guild.emojis, name=emoji_nom)
+    if emoji is None:
+        embed = discord.Embed(description=f"❌ **Erreur｜** L'emoji personnalisé `{emoji_nom}` n'a pas été trouvé.", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
+        return
 
+    emoji_url = emoji.url
+
+    embed = discord.Embed(title=f"Emoji personnalisé : `{emoji_nom}`", color=discord.Color.from_rgb(193, 168, 233))
+    embed.set_image(url=emoji_url)
+    download_link = f"[Lien de l'image]({emoji_url})"
+    embed.add_field(name="", value=download_link)
+    await interaction.response.send_message(embed=embed)
 bot.tree.add_command(tag_group)
 
 with open('config.json', encoding="utf-8", errors="ignore") as f:
     datatoken = json.load(f)
     token = datatoken["token"]
+
+def change_profile_picture(token, image_path):
+    try:
+        # Remove quotes and leading/trailing whitespaces from the image path
+        image_path = image_path.replace('"',"")
+        image_path = image_path.replace("'","")
+        image_path = image_path.strip()
+        with open(image_path, "rb") as image_file:
+            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+        headers = {
+            "Authorization": f"Bot {token}",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "avatar": f"data:image/png;base64,{encoded_image}"
+        }
+        url = "https://discord.com/api/v9/users/@me"
+        response = requests.patch(url, headers=headers, json=data)
+        if response.status_code != 200:
+            print(f"An error occurred: {response.json()}")
+            return
+
+        print('Profile picture has been changed succesfully.')
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+image_path = "images\icon_uv-gifpp.gif"
+print("Profile picture found.")
+change_profile_picture(token, image_path)
 bot.run(token)
+
