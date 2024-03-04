@@ -1,10 +1,10 @@
-# [uv]bot 
+# [patate]bot 
 
-![](https://dxnuv.github.io/patate-bot/images/ptpng-180x.png)
+![](https://dxnuv.github.io/uv-bot/images/ptpng-180x.png)
 
-[uv]bot est un bot discord crée exclusivement pour le serveur privé "ultraviolet [uv]" et présente de nombreuses fonctionnalitées essentielles.
-
-
+⚙️ Ce bot offre à ton serveur un max de ohio rizz pour faire trembler les minettes 🥵🫨. \
+🟣 Version modifié du bot "[uv]bot" crée par @dxnuv.\
+🚫 Bot exclusif au serveur "PommeDeTerre - Community".
 
 ## ⚙️ Fonctionnalités
 Liste des fonctionnalistés du bot.
