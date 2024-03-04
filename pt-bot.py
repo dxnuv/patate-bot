@@ -14,7 +14,7 @@ intents.members = True
 intents.presences = True
 
 
-bot = commands.Bot(command_prefix='uv!', intents=intents)
+bot = commands.Bot(command_prefix='pt!', intents=intents)
 
 
 @bot.event
@@ -85,13 +85,13 @@ async def servericon(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="help",description="Affiche des informations concernant [uv]bot.")
+@bot.tree.command(name="help",description="Affiche des informations concernant [patate]bot.")
 async def help(interaction: discord.Interaction):
  
-    embed = discord.Embed(title="[uv]bot", description="[uv]bot est un bot discord crée exclusivement pour le serveur ultraviolet et présente de nombreuses fonctionnalitées essentielles. \n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
+    embed = discord.Embed(title="[pate]bot", description=f"[patate]bot est un bot discord crée exclusivement pour le serveur PommeDeTerre - Community et présente de nombreuses fonctionnalitées essentielles. \n\n Ce bot est une version modifié du bot `[uv]bot` crée par `@prodeldxn`.\n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
     view = discord.ui.View() 
     style = discord.ButtonStyle.grey 
-    item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/uv-bot")  
+    item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/pt-bot")  
     view.add_item(item=item)
     await interaction.response.send_message(embed=embed,view=view)
 
@@ -115,34 +115,6 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
         embed = discord.Embed(description=f"✅** Bravo!｜**" + "💌 Lettre d'amour envoyé à " + utilisateur.mention , color=discord.Color.green())
         await interaction.response.send_message(embed=embed, ephemeral=True)
     
-@bot.tree.command(name="archive", description="Archive un salon textuel.")
-@app_commands.describe(salon_textuel="Lien du salon textuel")
-async def archive(interaction: discord.Interaction, salon_textuel: discord.TextChannel):
-
-    if interaction.user.guild_permissions.administrator:
-         date_formattee = datetime.now().strftime("%d-%m-%y")
-         nom_salon_archives = f"{salon_textuel.name}-{date_formattee}"  
-         categorie_archives = discord.utils.get(interaction.guild.categories, name="📦 archives")
-
-         if categorie_archives is None:
-             erreur = "La catégorie '📦 archives' n'a pas été trouvée."
-             embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
-             await interaction.response.send_message(embed=embed, ephemeral=True)
-         else:
-             await salon_textuel.edit(category=categorie_archives)
-
-             salon_textuel_og = salon_textuel.name
-             await salon_textuel.edit(name=nom_salon_archives)
-
-             await salon_textuel.edit(position=0)
-
-             embed = discord.Embed(description=f"✅** Bravo!｜**" + f"Le salon textuel `{salon_textuel_og}` a été archivé avec succès." , color=discord.Color.green())
-             await interaction.response.send_message(embed=embed, ephemeral=True)
-    else:
-            erreur = "Vous n'avez pas les permissions requises pour éxécuter cette commande."
-            embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-
     
     
 @bot.tree.command(name="lock",description="Désactive un salon textuel.")
@@ -183,29 +155,6 @@ async def unlock(interaction: discord.Interaction, salon_textuel: discord.TextCh
              embed = discord.Embed(description=f"❌** Erreur｜**" + f"{erreur}" , color=discord.Color.red())
              await interaction.response.send_message(embed=embed, ephemeral=True)    
 
-
-@bot.tree.command(name="rename", description="Renomme un salon textuel.")
-@app_commands.describe(salon_textuel="Lien du salon textuel", nouveau_nom="Nouveau nom du salon textuel")
-async def rename(interaction: discord.Interaction, salon_textuel: discord.TextChannel, nouveau_nom: str):
-    if interaction.user.guild_permissions.administrator:
-        try:
-            nom_actuel = salon_textuel.name
-            if '｜' in nom_actuel:  # Vérification s'il y a des caractères spéciaux
-                nom_actuel = nom_actuel.split('｜', 1)[-1]
-                nouveau_nom_complet = f"{salon_textuel.name.split('｜', 1)[0]}｜{nouveau_nom}"
-            else:
-                nouveau_nom_complet = nouveau_nom
-            await salon_textuel.edit(name=nouveau_nom_complet)
-            embed = discord.Embed(description=f"✅** Bravo!｜** Le salon textuel `{nom_actuel}` a été renommé en `{nouveau_nom_complet}` avec succès.", color=discord.Color.green())
-            await interaction.response.send_message(embed=embed)
-        except Exception as e:
-            erreur = f"Une erreur s'est produite lors du renommage du salon textuel : {e}"
-            embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
-            await interaction.response.send_message(embed=embed)
-    else:
-        erreur = "Vous n'avez pas les permissions requises pour exécuter cette commande."
-        embed = discord.Embed(description=f"❌** Erreur｜** {erreur}", color=discord.Color.red())
-        await interaction.response.send_message(embed=embed)
 
 def load_tags():
     try:
@@ -332,7 +281,7 @@ def change_profile_picture(token, image_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-image_path = "images\icon_uv-gifpp.gif"
+image_path = "images\icon_pt-gifpp.gif"
 print("Profile picture found.")
 change_profile_picture(token, image_path)
 bot.run(token)
