@@ -57,7 +57,7 @@ async def say(interaction: discord.Interaction, texte: str, salon_textuel: disco
 @bot.tree.command(name="avatar",description="Affiche l'avatar d'un utilisateur.")
 @app_commands.describe(utilisateur="L'utilisateur dont vous voulez connaitre l'avatar")
 async def avatar(interaction: discord.Interaction,  utilisateur: discord.Member ):
-    embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
+    embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(247, 236, 160 ) )
     embed.set_image(url=utilisateur.avatar)
     
     download_link = f"[Lien de l'image]({utilisateur.avatar})"
@@ -67,7 +67,7 @@ async def avatar(interaction: discord.Interaction,  utilisateur: discord.Member 
 @bot.tree.command(name="profileavatar",description="Affiche l'avatar de profil d'un utilisateur.")
 @app_commands.describe(utilisateur="L'utilisateur dont vous voulez connaitre l'avatar")
 async def profileavatar(interaction: discord.Interaction,  utilisateur: discord.Member ):
-    embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(193,168,233) )
+    embed = discord.Embed(title=f"Avatar de {utilisateur.display_name}",  color=discord.Color.from_rgb(247, 236, 160 ) )
     embed.set_image(url=utilisateur.display_avatar)
     
     download_link = f"[Lien de l'image]({utilisateur.display_avatar})"
@@ -78,7 +78,7 @@ async def profileavatar(interaction: discord.Interaction,  utilisateur: discord.
 async def servericon(interaction: discord.Interaction):
     guild_id = interaction.guild_id
     guild = bot.get_guild(guild_id)
-    embed = discord.Embed(title=f"Icône du serveur {guild}",  color=discord.Color.from_rgb(193,168,233) )
+    embed = discord.Embed(title=f"Icône du serveur {guild}",  color=discord.Color.from_rgb(247, 236, 160 ) )
     embed.set_image(url=guild.icon.url)
     download_link = f"[Lien de l'image]({guild.icon})"
     embed.add_field(name="", value=download_link)
@@ -88,7 +88,7 @@ async def servericon(interaction: discord.Interaction):
 @bot.tree.command(name="help",description="Affiche des informations concernant [patate]bot.")
 async def help(interaction: discord.Interaction):
  
-    embed = discord.Embed(title="[pate]bot", description=f"[patate]bot est un bot discord crée exclusivement pour le serveur PommeDeTerre - Community et présente de nombreuses fonctionnalitées essentielles. \n\n Ce bot est une version modifié du bot `[uv]bot` crée par `@prodeldxn`.\n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(193,168,233))
+    embed = discord.Embed(title="[patate]bot", description=f"[patate]bot est un bot discord crée exclusivement pour le serveur PommeDeTerre - Community et présente de nombreuses fonctionnalitées essentielles. \n\n Ce bot est une version modifié du bot `[uv]bot` crée par `@dxnuv`.\n\n La liste des commandes et fonctionnalitées est affiché sur le projet Github.", color=discord.Color.from_rgb(247, 236, 160 ))
     view = discord.ui.View() 
     style = discord.ButtonStyle.grey 
     item = discord.ui.Button(style=style, label="Github", url="https://github.com/dxnuv/pt-bot")  
@@ -103,7 +103,7 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
     guild_id = interaction.guild_id
     guild = bot.get_guild(guild_id)
     
-    embed = discord.Embed(title=f"💌 Un membre du serveur {guild} vous a envoyé une lettre d'amour...", color=discord.Color.from_rgb(242, 80, 83))
+    embed = discord.Embed(title=f"💌 Un membre du serveur {guild} vous a envoyé une lettre d'amour...", color=discord.Color.from_rgb(247, 236, 160 ))
     embed.set_thumbnail(url=guild.icon.url)
     embed.add_field(name="Cher,", value=utilisateur.mention, inline=False)
     embed.add_field(name="Message :", value=message, inline=False)
@@ -203,7 +203,7 @@ async def create_tag(interaction: discord.Interaction, tag_nom: str, texte: str)
 async def remove_tag(interaction: discord.Interaction, tag_nom: str):
     tags = load_tags()
     user_id = str(interaction.user.id)
-    if tag_nom in tags and tags[tag_nom]["creator_id"] == user_id:
+    if tag_nom in tags or tags[tag_nom]["creator_id"] == user_id or interaction.user.guild_permissions.administrator:
         del tags[tag_nom]
         save_tags(tags)
         embed = discord.Embed(description=f"✅ **Bravo!｜** Le tag `{tag_nom}` a été supprimé avec succès !", color=discord.Color.green())
@@ -216,11 +216,11 @@ async def remove_tag(interaction: discord.Interaction, tag_nom: str):
 async def list_tags(interaction: discord.Interaction):
     tags = load_tags()
     if not tags:
-        embed = discord.Embed(title="Liste des Tags", description="Aucun tag n'a été créé 😔. Utilisez `/tag new` pour créer un nouveau tag.", color=discord.Color.from_rgb(193, 168, 233))
+        embed = discord.Embed(title="Liste des Tags", description="Aucun tag n'a été créé 😔. Utilisez `/tag new` pour créer un nouveau tag.", color=discord.Color.from_rgb(247, 236, 160 ))
         await interaction.response.send_message(embed=embed)
         return
     sorted_tags = sorted(tags.items())  
-    embed = discord.Embed(title="Liste des Tags", color=discord.Color.from_rgb(193,168,233))
+    embed = discord.Embed(title="Liste des Tags", color=discord.Color.from_rgb(247, 236, 160 ))
     for tag_nom, data in sorted_tags:
         creator = interaction.guild.get_member(int(data["creator_id"]))
         if creator:
@@ -228,7 +228,7 @@ async def list_tags(interaction: discord.Interaction):
         else:
             creator_name = "Utilisateur Inconnu"
         embed.add_field(name=f"{tag_nom}", value=f"\n`Auteur` : {creator_name}", inline=False)
-        embed.set_footer(text=f"Utilisez `/tag new` pour créer un nouveau tag.")
+        embed.set_footer(text=f"Utilisez /tag new pour créer un nouveau tag.")
     await interaction.response.send_message(embed=embed)
 
 
@@ -244,7 +244,7 @@ async def custom_emoji(interaction: discord.Interaction, emoji_nom: str):
 
     emoji_url = emoji.url
 
-    embed = discord.Embed(title=f"Emoji personnalisé : `{emoji_nom}`", color=discord.Color.from_rgb(193, 168, 233))
+    embed = discord.Embed(title=f"Emoji personnalisé : `{emoji_nom}`", color=discord.Color.from_rgb(247, 236, 160 ))
     embed.set_image(url=emoji_url)
     download_link = f"[Lien de l'image]({emoji_url})"
     embed.add_field(name="", value=download_link)
