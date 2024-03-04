@@ -203,13 +203,19 @@ async def create_tag(interaction: discord.Interaction, tag_nom: str, texte: str)
 async def remove_tag(interaction: discord.Interaction, tag_nom: str):
     tags = load_tags()
     user_id = str(interaction.user.id)
-    if tag_nom in tags or tags[tag_nom]["creator_id"] == user_id or interaction.user.guild_permissions.administrator:
+    
+    if tag_nom not in tags:
+        embed = discord.Embed(description="❌ **Erreur｜** Ce tag n'existe pas.", color=discord.Color.red())
+        await interaction.response.send_message(embed=embed)
+        return
+
+    if tags[tag_nom]["creator_id"] == user_id or interaction.user.guild_permissions.administrator:
         del tags[tag_nom]
         save_tags(tags)
         embed = discord.Embed(description=f"✅ **Bravo!｜** Le tag `{tag_nom}` a été supprimé avec succès !", color=discord.Color.green())
         await interaction.response.send_message(embed=embed)
     else:
-        embed = discord.Embed(description="❌ **Erreur｜** Vous n'êtes pas l'auteur de ce tag ou le tag n'existe pas.", color=discord.Color.red())
+        embed = discord.Embed(description="❌ **Erreur｜** Vous n'êtes pas l'auteur de ce tag ou vous n'avez pas les permissions requises.", color=discord.Color.red())
         await interaction.response.send_message(embed=embed)
 
 @tag_group.command(name="list", description="Affiche la liste des tags.")
