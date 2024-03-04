@@ -4,7 +4,7 @@
 
 ⚙️ Ce bot offre à ton serveur un max de ohio rizz pour faire trembler les minettes 🥵🫨. \
 🟣 Version modifié du bot "[uv]bot" crée par @dxnuv.\
-🚫 Bot exclusif au serveur "PommeDeTerre - Community".
+🚫 Bot exclusif au serveur `PommeDeTerre - Community`.
 
 ## ⚙️ Fonctionnalités
 Liste des fonctionnalistés du bot.
