@@ -111,6 +111,9 @@ async def loveletter(interaction: discord.Interaction, utilisateur: discord.Memb
     embed.add_field(name="Message :", value=message, inline=False)
     if anonyme:
         embed.add_field(name="Signé, ", value="pookie bear anonyme 🥰")
+        await utilisateur.send(embed=embed)
+        embed = discord.Embed(description=f"✅** Bravo!｜**" + "💌 Lettre d'amour envoyé à " + utilisateur.mention , color=discord.Color.green())
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     else:
         embed.add_field(name="Signé, ", value=interaction.user.mention + " 🥰")
         await utilisateur.send(embed=embed)
